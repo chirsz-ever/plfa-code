@@ -103,7 +103,7 @@ t1 =
     (m + n) + (p + q)
   ≡⟨ +-assoc m n (p + q) ⟩
     m + (n + (p + q))
-  ≡⟨ cong (λ { x → m + x }) (sym (+-assoc n p q)) ⟩
+  ≡⟨ cong (m +_) (sym (+-assoc n p q)) ⟩
     m + ((n + p) + q)
   ≡⟨ sym (+-assoc m (n + p) q) ⟩
     (m + (n + p)) + q
@@ -144,15 +144,15 @@ t1 =
     (suc m) * (suc n)
   ≡⟨⟩
     (suc n) + m * (suc n)
-  ≡⟨ cong (_+_ (suc n)) (*-suc m n) ⟩
+  ≡⟨ cong ((suc n) +_) (*-suc m n) ⟩
     suc n + (m * n + m)
   ≡⟨ +-swap (suc n) (m * n) m ⟩
     m * n + (suc n + m)
-  ≡⟨ cong (_+_ (m * n)) (sym (+-suc n m)) ⟩
+  ≡⟨ cong ((m * n) +_) (sym (+-suc n m)) ⟩
     m * n + (n + suc m)
   ≡⟨ sym (+-assoc (m * n) n (suc m)) ⟩
     m * n + n + suc m
-  ≡⟨ cong (λ {x → x + (suc m)}) (+-comm (m * n) n) ⟩
+  ≡⟨ cong (_+ (suc m)) (+-comm (m * n) n) ⟩
     (suc m) * n + (suc m)
   ∎
 
@@ -165,7 +165,7 @@ t1 =
     n + m * n
   ≡⟨ +-comm n (m * n) ⟩
     m * n + n
-  ≡⟨ cong (λ {x → x + n}) (*-comm m n) ⟩
+  ≡⟨ cong (_+ n) (*-comm m n) ⟩
     n * m + n
   ≡⟨ sym (*-suc n m) ⟩
     n * suc m

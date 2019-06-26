@@ -12,8 +12,8 @@ _+_ : ℕ → ℕ → ℕ
 zero + n = n
 suc m + n = suc (m + n)
 
-a : 2 + 3 ≡ 5
-a = refl
+_ : 2 + 3 ≡ 5
+_ = refl
 
 _*_ : ℕ → ℕ → ℕ
 zero  * n  =  zero
@@ -23,8 +23,8 @@ _^_ : ℕ → ℕ → ℕ
 n ^ zero    = suc zero
 n ^ (suc m) = n * (n ^ m)
 
-b : 3 ^ 4 ≡ 81
-b =
+_ : 3 ^ 4 ≡ 81
+_ =
   begin
     3 ^ 4
   ≡⟨⟩
@@ -46,7 +46,7 @@ m     ∸ zero   =  m
 zero  ∸ suc n  =  zero
 suc m ∸ suc n  =  m ∸ n
 
-c =
+_ =
   begin
      3 ∸ 2
   ≡⟨⟩
@@ -57,7 +57,7 @@ c =
      1
   ∎
 
-d =
+_ =
   begin
      2 ∸ 3
   ≡⟨⟩
@@ -81,20 +81,20 @@ inc nil = x1 nil
 inc (x0 t) = x1 t
 inc (x1 t) = x0 (inc t)
 
-d1 : inc (x1 x1 x0 x1 nil) ≡ x0 x0 x1 x1 nil
-d1 = refl
+_ : inc (x1 x1 x0 x1 nil) ≡ x0 x0 x1 x1 nil
+_ = refl
 
-d2 : inc (x0 nil) ≡ x1 nil
-d2 = refl
+_ : inc (x0 nil) ≡ x1 nil
+_ = refl
 
-d3 : inc (x1 nil) ≡ x0 x1 nil
-d3 = refl
+_ : inc (x1 nil) ≡ x0 x1 nil
+_ = refl
 
-d4 : inc (x0 x1 nil) ≡ x1 x1 nil
-d4 = refl
+_ : inc (x0 x1 nil) ≡ x1 x1 nil
+_ = refl
 
-d5 : inc (x1 x1 nil) ≡ x0 x0 x1 nil
-d5 = refl
+_ : inc (x1 x1 nil) ≡ x0 x0 x1 nil
+_ = refl
 
 to   : ℕ → Bin
 to 0   = x0 nil
@@ -105,33 +105,33 @@ from nil      = 0
 from (x0 t)   = (from t) * 2
 from (x1 t)   = (from t) * 2 + 1
 
-e00 : to 0 ≡ x0 nil
-e00 = refl
+_ : to 0 ≡ x0 nil
+_ = refl
 
-e01 : to 1 ≡ x1 nil
-e01 = refl
+_ : to 1 ≡ x1 nil
+_ = refl
 
-e02 : to 2 ≡ x0 x1 nil
-e02 = refl
+_ : to 2 ≡ x0 x1 nil
+_ = refl
 
-e03 : to 3 ≡ x1 x1 nil
-e03 = refl
+_ : to 3 ≡ x1 x1 nil
+_ = refl
 
-e04 : to 4 ≡ x0 x0 x1 nil
-e04 = refl
+_ : to 4 ≡ x0 x0 x1 nil
+_ = refl
 
-e10 : 0 ≡ from (x0 nil)
-e10 = refl
+_ : 0 ≡ from (x0 nil)
+_ = refl
 
-e11 : 1 ≡ from (x1 nil)
-e11 = refl
+_ : 1 ≡ from (x1 nil)
+_ = refl
 
-e12 : 2 ≡ from (x0 x1 nil)
-e12 = refl
+_ : 2 ≡ from (x0 x1 nil)
+_ = refl
 
-e13 : 3 ≡ from (x1 x1 nil)
-e13 = refl
+_ : 3 ≡ from (x1 x1 nil)
+_ = refl
 
-e14 : 4 ≡ from (x0 x0 x1 nil)
-e14 = refl
+_ : 4 ≡ from (x0 x0 x1 nil)
+_ = refl
 
