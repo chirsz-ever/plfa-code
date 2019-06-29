@@ -1,3 +1,5 @@
+module plfa-code.Naturals where
+
 data ℕ : Set where
   zero : ℕ
   suc  : ℕ → ℕ
