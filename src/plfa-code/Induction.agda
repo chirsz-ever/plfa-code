@@ -6,8 +6,8 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_)
 open import Function
 
-t1 : (3 + 4) + 5 ≡ 3 + (4 + 5)
-t1 =
+_ : (3 + 4) + 5 ≡ 3 + (4 + 5)
+_ =
   begin
     (3 + 4) + 5
   ≡⟨⟩
@@ -172,12 +172,12 @@ t1 =
     n * suc m
   ∎
 
-t2 : ∀ (n : ℕ) → zero ∸ n ≡ zero
-t2 zero = refl
-t2 (suc n) = refl
+z∸n≡z : ∀ (n : ℕ) → zero ∸ n ≡ zero
+z∸n≡z zero = refl
+z∸n≡z (suc n) = refl
 
 ∸-+-assoc : ∀ (m n p : ℕ) → m ∸ n ∸ p ≡ m ∸ (n + p)
-∸-+-assoc zero n p rewrite t2 n | t2 p | t2 (n + p) = refl
+∸-+-assoc zero n p rewrite z∸n≡z n | z∸n≡z p | z∸n≡z (n + p) = refl
 ∸-+-assoc (suc m) zero p = refl
 ∸-+-assoc (suc m) (suc n) p rewrite ∸-+-assoc m n p = refl
 
@@ -188,12 +188,12 @@ data Bin : Set where
   x1_ : Bin → Bin
 
 inc : Bin → Bin
-inc nil = x1 nil
+inc nil    = x1 nil
 inc (x0 t) = x1 t
 inc (x1 t) = x0 (inc t)
 
-to   : ℕ → Bin
-to 0   = x0 nil
+to : ℕ → Bin
+to zero    = x0 nil
 to (suc n) = inc (to n)
 
 from : Bin → ℕ
@@ -202,18 +202,18 @@ from (x0 t)   = (from t) * 2
 from (x1 t)   = (from t) * 2 + 1
 --------------------------------------
 
-l1 : ∀ (n : ℕ) → n + 1 ≡ suc n
-l1 zero = refl
-l1 (suc n) rewrite l1 n = refl
++1≡suc : ∀ {n : ℕ} → n + 1 ≡ suc n
++1≡suc {zero}   = refl
++1≡suc {suc n}  = cong suc +1≡suc
 
-t3 : ∀ (x : Bin) → from (inc x) ≡ suc (from x)
-t3 nil = refl
-t3 (x0 x) rewrite l1 (from x * 2) = refl
-t3 (x1 x) rewrite t3 x | sym (l1 (from x * 2)) = refl
+suc-from-inc : ∀ (x : Bin) → from (inc x) ≡ suc (from x)
+suc-from-inc nil                                                        = refl
+suc-from-inc (x0 x) rewrite +1≡suc {from x * 2}                        = refl
+suc-from-inc (x1 x) rewrite suc-from-inc x | sym (+1≡suc {from x * 2}) = refl
 
 -- t4 is ⊥ , because `to (from nil) ≡ x0 nil ≢ nil`
 -- t4 : ∀ (x : Bin) → to (from x) ≡ x
 
-t5 : ∀ (n : ℕ) → from (to n) ≡ n
-t5 zero = refl
-t5 (suc n) rewrite t3 (to n) | t5 n = refl
+from-to-const : ∀ (n : ℕ) → from (to n) ≡ n
+from-to-const zero                                                  = refl
+from-to-const (suc n) rewrite suc-from-inc (to n) | from-to-const n = refl
