@@ -198,8 +198,8 @@ to (suc n) = inc (to n)
 
 from : Bin → ℕ
 from nil      = 0
-from (x0 t)   = (from t) * 2
-from (x1 t)   = (from t) * 2 + 1
+from (x0 t)   = 2 * (from t)
+from (x1 t)   = suc (2 * (from t))
 --------------------------------------
 
 +1≡suc : ∀ {n : ℕ} → n + 1 ≡ suc n
@@ -208,8 +208,8 @@ from (x1 t)   = (from t) * 2 + 1
 
 suc-from-inc : ∀ (x : Bin) → from (inc x) ≡ suc (from x)
 suc-from-inc nil                                                        = refl
-suc-from-inc (x0 x) rewrite +1≡suc {from x * 2}                        = refl
-suc-from-inc (x1 x) rewrite suc-from-inc x | sym (+1≡suc {from x * 2}) = refl
+suc-from-inc (x0 x) rewrite +1≡suc {from x * 2}                         = refl
+suc-from-inc (x1 x) rewrite suc-from-inc x | +-suc (from x) (from x + 0) = refl
 
 -- t4 is ⊥ , because `to (from nil) ≡ x0 nil ≢ nil`
 -- t4 : ∀ (x : Bin) → to (from x) ≡ x
