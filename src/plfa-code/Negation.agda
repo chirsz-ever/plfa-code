@@ -132,15 +132,15 @@ P₀⇒P₁ p₀ {A} ¬¬a with p₀ {A}
 ...                 | inj₂ ¬a = ⊥-elim (¬¬a ¬a)
 
 P₁⇒P₂ : P₁ → P₂
-P₁⇒P₂ p₁ x = p₁ (λ ¬a → ¬a (x (λ a → p₁ (λ _ → ¬a a))))
+P₁⇒P₂ p₁ x = p₁ $ λ ¬a → (¬a $ x $ p₁ ∘ const ∘ ¬a)
 
 P₂⇒P₃ : P₂ → P₃
-P₂⇒P₃ p₂ {A} {B} f = p₂ {¬ A ⊎ B} {⊥} (λ z → inj₁ (λ a → z (inj₂ (f a))))
+P₂⇒P₃ p₂ {A} {B} f = p₂ {¬ A ⊎ B} {⊥} (λ z → inj₁ (z ∘ inj₂ ∘ f))
 
 --- the prove 'P₃⇒P₄'  below referenced https://github.com/googleson78/plfa
 
 P₃⇒P₀ : P₃ → P₀
-P₃⇒P₀ p₃ {A} with p₃ (λ x → x)
+P₃⇒P₀ p₃ {A} with p₃ Function.id
 ...        | inj₁ ¬x = inj₂ ¬x
 ...        | inj₂  x = inj₁ x
 
@@ -151,7 +151,7 @@ P₃⇒P₄ : P₃ → P₄
 P₃⇒P₄ = P₁⇒P₄ ∘ P₀⇒P₁ ∘ P₃⇒P₀
 
 P₄⇒P₀ : P₄ → P₀
-P₄⇒P₀ p₄ {A} = p₄ {A} {¬ A} (λ x → proj₂ x (proj₁ x))
+P₄⇒P₀ p₄ {A} = p₄ {A} {¬ A} $ proj₂ ˢ proj₁
 
 Stable : Set → Set
 Stable A = ¬ ¬ A → A
@@ -160,4 +160,4 @@ Stable A = ¬ ¬ A → A
 ¬⇒stable ¬a = ¬¬¬-elim
 
 ×⇒stable : ∀ {A B : Set} → Stable A → Stable B → Stable (A × B)
-×⇒stable a b = λ x → ⟨ (a (λ z → x (z ∘ proj₁))) , (b (λ z → x (z ∘ proj₂))) ⟩
+×⇒stable a b = λ x → ⟨ (a $ λ z → x (z ∘ proj₁)) , (b $ λ z → x (z ∘ proj₂)) ⟩
