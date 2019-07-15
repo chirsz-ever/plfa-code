@@ -135,3 +135,47 @@ open import Function.LeftInverse using (_↞_)
   ; from            = record { _⟨$⟩_ = from ; cong = cong from }
   ; left-inverse-of = from-to-const
   }
+
+open import Function.Inverse using (_↔_)
+open import Data.Product
+  using (Σ; ∃; Σ-syntax; ∃-syntax) renaming (_,_ to ⟨_,_⟩)
+open import Function using (_∘_)
+
+one-assim : ∀ {b : Bin} → (x : One b) → (y : One b) → x ≡ y
+one-assim one one = refl
+one-assim (x0 x) (x0 y) = sym (cong x0_ (one-assim y x))
+one-assim (x1 x) (x1 y) = sym (cong x1_ (one-assim y x))
+
+can-assim : ∀ {b : Bin} → (x : Can b) → (y : Can b) → x ≡ y
+can-assim zero zero = refl
+can-assim zero (can-one (x0 ()))
+can-assim (can-one (x0 ())) zero
+can-assim (can-one one) (can-one one) = refl
+can-assim (can-one (x0 x)) (can-one (x0 y)) = cong (can-one ∘ x0_) (one-assim x y)
+can-assim (can-one (x1 x)) (can-one (x1 y)) = cong (can-one ∘ x1_) (one-assim x y)
+
+∃-proj₁ : {A : Set} {B : A → Set} → ∃[ x ] B x → A
+∃-proj₁ ⟨ x , _ ⟩ = x
+
+∃≡ : ∀ {A : Set} {B : A → Set} (p₁ : ∃[ x ](B x)) (p₂ : ∃[ y ](B y))
+  → ∃-proj₁ p₁ ≡ ∃-proj₁ p₂ → (∀ (x) → (b₁ : B x) → (b₂ : B x) → b₁ ≡ b₂)
+  → p₁ ≡ p₂
+∃≡ ⟨ x , bx ⟩ ⟨ .x , by ⟩ refl f = sym (cong (⟨_,_⟩ x) (f x by bx))
+
+Bin-isomorphism : ℕ ↔ ∃[ x ](Can x)
+Bin-isomorphism =
+  record
+  { to         = record { _⟨$⟩_ = to′; cong = cong to′}
+  ; from       = record { _⟨$⟩_ = from′; cong = cong from′}
+  ; inverse-of = record
+                 { left-inverse-of = from-to-const
+                 ; right-inverse-of = to∘from′
+                 }
+  }
+  where
+  to′ : ℕ → ∃[ x ](Can x)
+  to′ n = ⟨ to n , can-to-n n ⟩
+  from′ : ∃[ x ](Can x) → ℕ
+  from′ ⟨ b , can-b ⟩ = from b
+  to∘from′ : ∀ y → to′ (from′ y) ≡ y
+  to∘from′ ⟨ b , can-b ⟩  = ∃≡ ⟨ to (from b) , can-to-n (from b) ⟩ ⟨ b , can-b ⟩ (can-tf-eq can-b) (λ x → can-assim {x})
