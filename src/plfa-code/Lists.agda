@@ -783,7 +783,7 @@ All-∀ {A} {P} xs =
     (λ x₁ → ∀-extensionality (to (x ∷ xs) (from (x ∷ xs) f) x₁) (f x₁)
       λ{ (here refl) → refl
        ; (there x₁∈xs) → cong (λ g → g x₁ x₁∈xs)
-                (to∘from xs ((λ x₂ → (f x₂) ∘ there)))
+                (to∘from xs (λ x₂ → (f x₂) ∘ there))
        }
     )
 
