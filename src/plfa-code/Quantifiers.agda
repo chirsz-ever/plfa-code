@@ -187,7 +187,9 @@ odd-∃  (odd-suc e)  with even-∃ e
 --------- practice ----------
 open import Data.Nat.Properties using (+-identityʳ; +-suc; +-assoc)
 open Eq using (cong; sym; trans)
-open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+open Eq.≡-Reasoning using (begin_; _≡⟨⟩_)
+
+open import plfa-code.Reasoning-legacy
 
 ∃-even′ : ∀ {n : ℕ} → ∃[ m ] (    2 * m ≡ n) → even n
 ∃-odd′  : ∀ {n : ℕ} → ∃[ m ] (2 * m + 1 ≡ n) →  odd n
@@ -198,7 +200,7 @@ dbl≡2* n = cong (n +_) (sym (+-identityʳ n))
 ∃-even′ ⟨ zero , refl ⟩ = even-zero
 ∃-even′ ⟨ suc m , refl ⟩
   rewrite +-identityʳ m | +-suc m m | dbl≡2* m
-                  = even-suc (odd-suc (∃-even′ ⟨ (m) , refl ⟩))
+                  = even-suc (odd-suc (∃-even′ ⟨ m , refl ⟩))
 
 ∃-odd′ ⟨ m , refl ⟩ rewrite +-suc (2 * m) 0
                           | +-identityʳ m
@@ -210,12 +212,12 @@ dbl≡2* n = cong (n +_) (sym (+-identityʳ n))
 open Data.Nat using (_≤_; z≤n; s≤s)
 open Data.Nat.Properties using (≤-pred)
 
-∃+⇒≤ : ∀ (y z) → ∃[ x ] (x + y ≡ z) → y ≤ z
+∃+⇒≤ : ∀ (y z : ℕ) → ∃[ x ] (x + y ≡ z) → y ≤ z
 ∃+⇒≤ zero .(x + 0) ⟨ x , refl ⟩ = z≤n
 ∃+⇒≤ (suc y) .(x + suc y) ⟨ x , refl ⟩ rewrite +-suc x y
                                 = s≤s (∃+⇒≤ y (x + y) ⟨ x , refl ⟩)
 
-≤⇒∃+ : ∀ (y z) → y ≤ z → ∃[ x ] (x + y ≡ z)
+≤⇒∃+ : ∀ (y z : ℕ) → y ≤ z → ∃[ x ] (x + y ≡ z)
 ≤⇒∃+ zero z y≤z = ⟨ z , (+-identityʳ z) ⟩
 ≤⇒∃+ (suc y) (suc z) y≤z with ≤⇒∃+ y z (≤-pred y≤z)
 ...         | ⟨ x , x+y≡z ⟩ = ⟨ x , trans (+-suc x y) (cong suc x+y≡z) ⟩

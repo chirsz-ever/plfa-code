@@ -94,7 +94,7 @@ inv-≡ refl = refl
 ... | greater n<m ¬m≡n ¬m<n = greater    (s≤s n<m) (¬m≡n ∘ inv-≡) (¬m<n ∘ inv-<)
 ... | equal   m≡n ¬m<n ¬n<m = equal (cong suc m≡n) (¬m<n ∘ inv-<) (¬n<m ∘ inv-<)
 
-⊎-dual-× : ∀ (A B) → ¬ (A ⊎ B) ≃ (¬ A) × (¬ B)
+⊎-dual-× : ∀ (A B : Set) → ¬ (A ⊎ B) ≃ (¬ A) × (¬ B)
 ⊎-dual-× A B =
   record
   { to      = λ ¬-A⊎B → ⟨ (¬-A⊎B ∘ inj₁) , (¬-A⊎B ∘ inj₂) ⟩
@@ -106,7 +106,7 @@ inv-≡ refl = refl
   }
 
 -- ¬ (A × B) ≃ (¬ A) ⊎ (¬ B) does not hold, but we could say:
-⊎¬-implies-¬× : ∀ (A B) → (¬ A) ⊎ (¬ B) → ¬ (A × B)
+⊎¬-implies-¬× : ∀ (A B : Set) → (¬ A) ⊎ (¬ B) → ¬ (A × B)
 ⊎¬-implies-¬× A B (inj₁ ¬a) = λ ab → ¬a (proj₁ ab)
 ⊎¬-implies-¬× A B (inj₂ ¬b) = λ ab → ¬b (proj₂ ab)
 
