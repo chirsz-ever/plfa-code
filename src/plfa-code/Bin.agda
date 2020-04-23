@@ -3,10 +3,20 @@ module plfa-code.Bin where
 -- I collect code about Bin there. other definitions I use the std-lib version
 
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; cong; sym)
-open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _≡⟨_⟩_; _∎)
+open Eq using (_≡_; refl; cong; sym; trans)
+open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _∎)
 open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_; _≤_; z≤n; s≤s)
 open import Data.Nat.Properties using (+-comm; +-suc; +-mono-≤)
+
+infixr 2 _≡⟨_⟩_
+
+_≡⟨_⟩_ : ∀ {A : Set} (x : A) {y z : A}
+  → x ≡ y
+  → y ≡ z
+    -------
+  → x ≡ z
+x ≡⟨ x≡y ⟩ y≡z  =  trans x≡y y≡z
+
 
 data Bin : Set where
   nil : Bin
@@ -82,9 +92,16 @@ l0 zero    = refl
 l0 (suc n) = refl
 
 2n-eq-x0 : ∀ (n) → 1 ≤ n → to (n + n) ≡ x0 (to n)
+2n-eq-x0 zero ()
 2n-eq-x0 (suc zero) (s≤s z≤n) = refl
-2n-eq-x0 (suc (suc n)) (s≤s z≤n) rewrite +-suc n (suc n)
-                                       | 2n-eq-x0 (suc n) (s≤s z≤n) = refl
+2n-eq-x0 (suc (suc n)) (s≤s z≤n) =
+  begin to (suc (suc n) + suc (suc n))
+  ≡⟨ cong (λ x → to x) (+-suc (suc (suc n)) (suc n)) ⟩  to (suc (suc (suc n + suc n)))
+  ≡⟨⟩  inc (inc (to (suc n + suc n)))
+  ≡⟨ cong (λ x → (inc (inc x))) (2n-eq-x0 (suc n) (s≤s z≤n)) ⟩  inc (inc (x0 (to (suc n))))
+  ≡⟨⟩  x0 (inc (to (suc n)))
+  ≡⟨⟩  x0 (to (suc (suc n)))
+  ∎
 
 one-b-iff-1≤b : ∀ (b) → One b → 1 ≤ from b
 one-b-iff-1≤b (x0 b) (x0 ob)
