@@ -1,3 +1,4 @@
+{-# OPTIONS --termination-depth=2 #-}
 module plfa-code.Quantifiers where
 
 import Relation.Binary.PropositionalEquality as Eq
